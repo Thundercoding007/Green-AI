@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Data
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+*.csv
+*.pkl
+*.joblib
+
+# Models
+data/models/*
+!data/models/.gitkeep
+*.pt
+*.pth
+*.onnx
+*.bin
+
+# Logs & Outputs
+logs/*
+emissions/*
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env.local
+.env.*.local
+
+# Database
+*.db
+*.sqlite
+
+# OS
+.DS_Store
+Thumbs.db

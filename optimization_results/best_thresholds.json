@@ -1,0 +1,20 @@
+{
+  "Balanced": {
+    "green_threshold": 0.5,
+    "medium_threshold": 0.5,
+    "accuracy": 0.9980657640232108,
+    "energy_savings_pct": 96.47969052224371
+  },
+  "Max Accuracy": {
+    "green_threshold": 0.6000000000000001,
+    "medium_threshold": 0.5,
+    "accuracy": 1.0,
+    "energy_savings_pct": 95.68665377176015
+  },
+  "Max Energy": {
+    "green_threshold": 0.5,
+    "medium_threshold": 0.5,
+    "accuracy": 0.9980657640232108,
+    "energy_savings_pct": 96.47969052224371
+  }
+}
