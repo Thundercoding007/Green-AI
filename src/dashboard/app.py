@@ -36,27 +36,72 @@ st.set_page_config(
 # Custom CSS
 st.markdown("""
 <style>
-    .main-header {
-        font-size: 3rem;
-        font-weight: bold;
-        color: #2ecc71;
-        text-align: center;
-        margin-bottom: 1rem;
-    }
-    .metric-card {
-        background-color: #f0f2f6;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        border-left: 4px solid #2ecc71;
-    }
-    .stMetric {
-        background-color: #ffffff;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+/* ---------- MAIN HEADER ---------- */
+.main-header {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #2ecc71;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* ---------- METRIC BOXES ---------- */
+div[data-testid="stMetricValue"], div[data-testid="stMetricDelta"] {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+div[data-testid="stMetric"] {
+    background-color: rgba(40, 40, 40, 0.9) !important;
+    border: 1px solid #2ecc71;
+    border-radius: 0.75rem !important;
+    padding: 1rem !important;
+    box-shadow: 0 0 8px rgba(46, 204, 113, 0.3);
+}
+
+/* ---------- CONTAINERS & TABLES ---------- */
+.block-container {
+    background-color: #111 !important;
+    color: #eee !important;
+}
+
+div[data-testid="stDataFrame"] {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    border-radius: 0.5rem;
+}
+
+thead, th, td {
+    color: #ddd !important;
+    background-color: #1b1b1b !important;
+}
+
+/* ---------- EXPANDERS ---------- */
+.streamlit-expanderHeader {
+    background-color: #2ecc71 !important;
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+/* ---------- BUTTONS ---------- */
+button[kind="primary"] {
+    background-color: #2ecc71 !important;
+    color: white !important;
+    border-radius: 0.5rem !important;
+    border: none !important;
+    font-weight: 600;
+}
+button[kind="primary"]:hover {
+    background-color: #27ae60 !important;
+}
+
+/* ---------- PIE / BAR CHART BACKGROUND ---------- */
+.plotly-graph-div, .js-plotly-plot {
+    background-color: transparent !important;
+}
 </style>
 """, unsafe_allow_html=True)
+
 
 # API Configuration
 API_BASE_URL = os.getenv("API_BASE_URL", f"http://{Config.API_HOST}:{Config.API_PORT}")
@@ -335,12 +380,50 @@ def show_classifier():
                             st.write(f"- Energy: {format_energy_kwh(result['energy_kwh'])}")
                         if result.get('co2_grams'):
                             st.write(f"- CO₂: {result['co2_grams']:.6f} g")
+
+                    # --- Build a tidy DataFrame for Plotly Express (fixes the ValueError) ---
+                    probs_dict = result.get("probabilities", {})
+                    probs_df = pd.DataFrame({
+                        "Class": [str(k) for k in probs_dict.keys()],
+                        "Probability": list(probs_dict.values())
+                    })
+
+                    # ✅ Normalize probabilities if they look like percentages (e.g., 57.2 instead of 0.572)
+                    if probs_df["Probability"].max() > 1:
+                        probs_df["Probability"] = probs_df["Probability"] / 100.0
+
+                    # ✅ Sort by confidence descending (for cleaner visual)
+                    probs_df = probs_df.sort_values("Probability", ascending=False)
+                    
+                    # Create bar chart from DataFrame
                     fig = px.bar(
-                        x=list(result['probabilities'].keys()),
-                        y=list(result['probabilities'].values()),
-                        color=list(result['probabilities'].keys())
+                        probs_df,
+                        x="Class",
+                        y="Probability",
+                        text=probs_df["Probability"].apply(lambda x: f"{x*100:.1f}%"),
+                        color="Class",
+                        color_discrete_map={
+                            "work": "#2ecc71",
+                            "spam": "#e74c3c",
+                            "support": "#3498db",
+                            "personal": "#9b59b6"
+                        },
+                        labels={"Class": "Email Class", "Probability": "Confidence"}
                     )
+
+                    # ✅ Styling for better visuals
+                    fig.update_traces(textposition="outside")
+                    fig.update_layout(
+                        showlegend=False,
+                        height=350,
+                        yaxis_tickformat=".0%",
+                        margin=dict(t=20, b=20, l=20, r=20),
+                        plot_bgcolor="rgba(0,0,0,0)",
+                        paper_bgcolor="rgba(0,0,0,0)",
+                    )
+
                     st.plotly_chart(fig, use_container_width=True)
+
 
     with tab2:
         st.subheader("Batch Classification")
