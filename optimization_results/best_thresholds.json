@@ -1,20 +1,698 @@
 {
-  "Balanced": {
+  "strategy": "balanced",
+  "coarse_summary": [
+    {
+      "green_threshold": 0.5,
+      "medium_threshold": 0.5,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.47969052224371,
+      "green_usage": 99.80657640232108,
+      "medium_usage": 0.0,
+      "heavy_usage": 0.19342359767891684
+    },
+    {
+      "green_threshold": 0.55,
+      "medium_threshold": 0.5,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 95.98968407479046,
+      "green_usage": 99.03288201160542,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.5802707930367506
+    },
+    {
+      "green_threshold": 0.55,
+      "medium_threshold": 0.55,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 95.98968407479046,
+      "green_usage": 99.03288201160542,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.5802707930367506
+    },
+    {
+      "green_threshold": 0.6000000000000001,
+      "medium_threshold": 0.5,
+      "accuracy": 1.0,
+      "energy_savings_pct": 95.68665377176015,
+      "green_usage": 98.45261121856866,
+      "medium_usage": 0.7736943907156674,
+      "heavy_usage": 0.7736943907156674
+    },
+    {
+      "green_threshold": 0.6000000000000001,
+      "medium_threshold": 0.55,
+      "accuracy": 1.0,
+      "energy_savings_pct": 95.68665377176015,
+      "green_usage": 98.45261121856866,
+      "medium_usage": 0.7736943907156674,
+      "heavy_usage": 0.7736943907156674
+    },
+    {
+      "green_threshold": 0.6000000000000001,
+      "medium_threshold": 0.6000000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 95.68665377176015,
+      "green_usage": 98.45261121856866,
+      "medium_usage": 0.7736943907156674,
+      "heavy_usage": 0.7736943907156674
+    },
+    {
+      "green_threshold": 0.6500000000000001,
+      "medium_threshold": 0.5,
+      "accuracy": 1.0,
+      "energy_savings_pct": 95.38362346872985,
+      "green_usage": 97.87234042553192,
+      "medium_usage": 1.160541586073501,
+      "heavy_usage": 0.9671179883945842
+    },
+    {
+      "green_threshold": 0.6500000000000001,
+      "medium_threshold": 0.55,
+      "accuracy": 1.0,
+      "energy_savings_pct": 95.12572533849129,
+      "green_usage": 97.87234042553192,
+      "medium_usage": 0.7736943907156674,
+      "heavy_usage": 1.3539651837524178
+    },
+    {
+      "green_threshold": 0.6500000000000001,
+      "medium_threshold": 0.6000000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 95.12572533849129,
+      "green_usage": 97.87234042553192,
+      "medium_usage": 0.7736943907156674,
+      "heavy_usage": 1.3539651837524178
+    },
+    {
+      "green_threshold": 0.6500000000000001,
+      "medium_threshold": 0.6500000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 95.12572533849129,
+      "green_usage": 97.87234042553192,
+      "medium_usage": 0.7736943907156674,
+      "heavy_usage": 1.3539651837524178
+    },
+    {
+      "green_threshold": 0.7000000000000002,
+      "medium_threshold": 0.5,
+      "accuracy": 1.0,
+      "energy_savings_pct": 94.83558994197293,
+      "green_usage": 96.90522243713733,
+      "medium_usage": 1.7408123791102514,
+      "heavy_usage": 1.3539651837524178
+    },
+    {
+      "green_threshold": 0.7000000000000002,
+      "medium_threshold": 0.55,
+      "accuracy": 1.0,
+      "energy_savings_pct": 94.44874274661508,
+      "green_usage": 96.90522243713733,
+      "medium_usage": 1.160541586073501,
+      "heavy_usage": 1.9342359767891684
+    },
+    {
+      "green_threshold": 0.7000000000000002,
+      "medium_threshold": 0.6000000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 94.44874274661508,
+      "green_usage": 96.90522243713733,
+      "medium_usage": 1.160541586073501,
+      "heavy_usage": 1.9342359767891684
+    },
+    {
+      "green_threshold": 0.7000000000000002,
+      "medium_threshold": 0.6500000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 94.44874274661508,
+      "green_usage": 96.90522243713733,
+      "medium_usage": 1.160541586073501,
+      "heavy_usage": 1.9342359767891684
+    },
+    {
+      "green_threshold": 0.7000000000000002,
+      "medium_threshold": 0.7000000000000002,
+      "accuracy": 1.0,
+      "energy_savings_pct": 94.44874274661508,
+      "green_usage": 96.90522243713733,
+      "medium_usage": 1.160541586073501,
+      "heavy_usage": 1.9342359767891684
+    },
+    {
+      "green_threshold": 0.7500000000000002,
+      "medium_threshold": 0.5,
+      "accuracy": 1.0,
+      "energy_savings_pct": 94.34558349451967,
+      "green_usage": 96.13152804642166,
+      "medium_usage": 2.127659574468085,
+      "heavy_usage": 1.7408123791102514
+    },
+    {
+      "green_threshold": 0.7500000000000002,
+      "medium_threshold": 0.55,
+      "accuracy": 1.0,
+      "energy_savings_pct": 93.95873629916183,
+      "green_usage": 96.13152804642166,
+      "medium_usage": 1.5473887814313347,
+      "heavy_usage": 2.321083172147002
+    },
+    {
+      "green_threshold": 0.7500000000000002,
+      "medium_threshold": 0.6000000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 93.95873629916183,
+      "green_usage": 96.13152804642166,
+      "medium_usage": 1.5473887814313347,
+      "heavy_usage": 2.321083172147002
+    },
+    {
+      "green_threshold": 0.7500000000000002,
+      "medium_threshold": 0.6500000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 93.95873629916183,
+      "green_usage": 96.13152804642166,
+      "medium_usage": 1.5473887814313347,
+      "heavy_usage": 2.321083172147002
+    },
+    {
+      "green_threshold": 0.7500000000000002,
+      "medium_threshold": 0.7000000000000002,
+      "accuracy": 1.0,
+      "energy_savings_pct": 93.95873629916183,
+      "green_usage": 96.13152804642166,
+      "medium_usage": 1.5473887814313347,
+      "heavy_usage": 2.321083172147002
+    },
+    {
+      "green_threshold": 0.7500000000000002,
+      "medium_threshold": 0.7500000000000002,
+      "accuracy": 1.0,
+      "energy_savings_pct": 93.95873629916183,
+      "green_usage": 96.13152804642166,
+      "medium_usage": 1.5473887814313347,
+      "heavy_usage": 2.321083172147002
+    },
+    {
+      "green_threshold": 0.8000000000000003,
+      "medium_threshold": 0.5,
+      "accuracy": 1.0,
+      "energy_savings_pct": 94.11347517730496,
+      "green_usage": 95.35783365570599,
+      "medium_usage": 2.9013539651837523,
+      "heavy_usage": 1.7408123791102514
+    },
+    {
+      "green_threshold": 0.8000000000000003,
+      "medium_threshold": 0.55,
+      "accuracy": 1.0,
+      "energy_savings_pct": 93.46872985170857,
+      "green_usage": 95.35783365570599,
+      "medium_usage": 1.9342359767891684,
+      "heavy_usage": 2.7079303675048356
+    },
+    {
+      "green_threshold": 0.8000000000000003,
+      "medium_threshold": 0.6000000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 93.46872985170857,
+      "green_usage": 95.35783365570599,
+      "medium_usage": 1.9342359767891684,
+      "heavy_usage": 2.7079303675048356
+    },
+    {
+      "green_threshold": 0.8000000000000003,
+      "medium_threshold": 0.6500000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 93.46872985170857,
+      "green_usage": 95.35783365570599,
+      "medium_usage": 1.9342359767891684,
+      "heavy_usage": 2.7079303675048356
+    },
+    {
+      "green_threshold": 0.8000000000000003,
+      "medium_threshold": 0.7000000000000002,
+      "accuracy": 1.0,
+      "energy_savings_pct": 93.46872985170857,
+      "green_usage": 95.35783365570599,
+      "medium_usage": 1.9342359767891684,
+      "heavy_usage": 2.7079303675048356
+    },
+    {
+      "green_threshold": 0.8000000000000003,
+      "medium_threshold": 0.7500000000000002,
+      "accuracy": 1.0,
+      "energy_savings_pct": 93.46872985170857,
+      "green_usage": 95.35783365570599,
+      "medium_usage": 1.9342359767891684,
+      "heavy_usage": 2.7079303675048356
+    },
+    {
+      "green_threshold": 0.8000000000000003,
+      "medium_threshold": 0.8000000000000003,
+      "accuracy": 1.0,
+      "energy_savings_pct": 93.3397807865893,
+      "green_usage": 95.35783365570599,
+      "medium_usage": 1.7408123791102514,
+      "heavy_usage": 2.9013539651837523
+    },
+    {
+      "green_threshold": 0.8500000000000003,
+      "medium_threshold": 0.5,
+      "accuracy": 1.0,
+      "energy_savings_pct": 93.63636363636364,
+      "green_usage": 94.1972920696325,
+      "medium_usage": 3.8684719535783367,
+      "heavy_usage": 1.9342359767891684
+    },
+    {
+      "green_threshold": 0.8500000000000003,
+      "medium_threshold": 0.55,
+      "accuracy": 1.0,
+      "energy_savings_pct": 92.6047711154094,
+      "green_usage": 94.1972920696325,
+      "medium_usage": 2.321083172147002,
+      "heavy_usage": 3.481624758220503
+    },
+    {
+      "green_threshold": 0.8500000000000003,
+      "medium_threshold": 0.6000000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 92.6047711154094,
+      "green_usage": 94.1972920696325,
+      "medium_usage": 2.321083172147002,
+      "heavy_usage": 3.481624758220503
+    },
+    {
+      "green_threshold": 0.8500000000000003,
+      "medium_threshold": 0.6500000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 92.6047711154094,
+      "green_usage": 94.1972920696325,
+      "medium_usage": 2.321083172147002,
+      "heavy_usage": 3.481624758220503
+    },
+    {
+      "green_threshold": 0.8500000000000003,
+      "medium_threshold": 0.7000000000000002,
+      "accuracy": 1.0,
+      "energy_savings_pct": 92.6047711154094,
+      "green_usage": 94.1972920696325,
+      "medium_usage": 2.321083172147002,
+      "heavy_usage": 3.481624758220503
+    },
+    {
+      "green_threshold": 0.8500000000000003,
+      "medium_threshold": 0.7500000000000002,
+      "accuracy": 1.0,
+      "energy_savings_pct": 92.6047711154094,
+      "green_usage": 94.1972920696325,
+      "medium_usage": 2.321083172147002,
+      "heavy_usage": 3.481624758220503
+    },
+    {
+      "green_threshold": 0.8500000000000003,
+      "medium_threshold": 0.8000000000000003,
+      "accuracy": 1.0,
+      "energy_savings_pct": 92.47582205029013,
+      "green_usage": 94.1972920696325,
+      "medium_usage": 2.127659574468085,
+      "heavy_usage": 3.67504835589942
+    },
+    {
+      "green_threshold": 0.8500000000000003,
+      "medium_threshold": 0.8500000000000003,
+      "accuracy": 1.0,
+      "energy_savings_pct": 92.47582205029013,
+      "green_usage": 94.1972920696325,
+      "medium_usage": 2.127659574468085,
+      "heavy_usage": 3.67504835589942
+    },
+    {
+      "green_threshold": 0.9000000000000004,
+      "medium_threshold": 0.5,
+      "accuracy": 1.0,
+      "energy_savings_pct": 93.17214700193423,
+      "green_usage": 92.64990328820116,
+      "medium_usage": 5.415860735009671,
+      "heavy_usage": 1.9342359767891684
+    },
+    {
+      "green_threshold": 0.9000000000000004,
+      "medium_threshold": 0.55,
+      "accuracy": 1.0,
+      "energy_savings_pct": 91.88265635074146,
+      "green_usage": 92.64990328820116,
+      "medium_usage": 3.481624758220503,
+      "heavy_usage": 3.8684719535783367
+    },
+    {
+      "green_threshold": 0.9000000000000004,
+      "medium_threshold": 0.6000000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 91.75370728562217,
+      "green_usage": 92.64990328820116,
+      "medium_usage": 3.2882011605415857,
+      "heavy_usage": 4.061895551257253
+    },
+    {
+      "green_threshold": 0.9000000000000004,
+      "medium_threshold": 0.6500000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 91.75370728562217,
+      "green_usage": 92.64990328820116,
+      "medium_usage": 3.2882011605415857,
+      "heavy_usage": 4.061895551257253
+    },
+    {
+      "green_threshold": 0.9000000000000004,
+      "medium_threshold": 0.7000000000000002,
+      "accuracy": 1.0,
+      "energy_savings_pct": 91.75370728562217,
+      "green_usage": 92.64990328820116,
+      "medium_usage": 3.2882011605415857,
+      "heavy_usage": 4.061895551257253
+    },
+    {
+      "green_threshold": 0.9000000000000004,
+      "medium_threshold": 0.7500000000000002,
+      "accuracy": 1.0,
+      "energy_savings_pct": 91.75370728562217,
+      "green_usage": 92.64990328820116,
+      "medium_usage": 3.2882011605415857,
+      "heavy_usage": 4.061895551257253
+    },
+    {
+      "green_threshold": 0.9000000000000004,
+      "medium_threshold": 0.8000000000000003,
+      "accuracy": 1.0,
+      "energy_savings_pct": 91.6247582205029,
+      "green_usage": 92.64990328820116,
+      "medium_usage": 3.0947775628626695,
+      "heavy_usage": 4.25531914893617
+    },
+    {
+      "green_threshold": 0.9000000000000004,
+      "medium_threshold": 0.8500000000000003,
+      "accuracy": 1.0,
+      "energy_savings_pct": 91.6247582205029,
+      "green_usage": 92.64990328820116,
+      "medium_usage": 3.0947775628626695,
+      "heavy_usage": 4.25531914893617
+    },
+    {
+      "green_threshold": 0.9000000000000004,
+      "medium_threshold": 0.9000000000000004,
+      "accuracy": 1.0,
+      "energy_savings_pct": 91.23791102514507,
+      "green_usage": 92.64990328820116,
+      "medium_usage": 2.5145067698259185,
+      "heavy_usage": 4.835589941972921
+    },
+    {
+      "green_threshold": 0.9500000000000004,
+      "medium_threshold": 0.5,
+      "accuracy": 1.0,
+      "energy_savings_pct": 92.47582205029013,
+      "green_usage": 90.32882011605416,
+      "medium_usage": 7.7369439071566735,
+      "heavy_usage": 1.9342359767891684
+    },
+    {
+      "green_threshold": 0.9500000000000004,
+      "medium_threshold": 0.55,
+      "accuracy": 1.0,
+      "energy_savings_pct": 91.05738233397808,
+      "green_usage": 90.32882011605416,
+      "medium_usage": 5.609284332688588,
+      "heavy_usage": 4.061895551257253
+    },
+    {
+      "green_threshold": 0.9500000000000004,
+      "medium_threshold": 0.6000000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 90.9284332688588,
+      "green_usage": 90.32882011605416,
+      "medium_usage": 5.415860735009671,
+      "heavy_usage": 4.25531914893617
+    },
+    {
+      "green_threshold": 0.9500000000000004,
+      "medium_threshold": 0.6500000000000001,
+      "accuracy": 1.0,
+      "energy_savings_pct": 90.9284332688588,
+      "green_usage": 90.32882011605416,
+      "medium_usage": 5.415860735009671,
+      "heavy_usage": 4.25531914893617
+    },
+    {
+      "green_threshold": 0.9500000000000004,
+      "medium_threshold": 0.7000000000000002,
+      "accuracy": 1.0,
+      "energy_savings_pct": 90.9284332688588,
+      "green_usage": 90.32882011605416,
+      "medium_usage": 5.415860735009671,
+      "heavy_usage": 4.25531914893617
+    },
+    {
+      "green_threshold": 0.9500000000000004,
+      "medium_threshold": 0.7500000000000002,
+      "accuracy": 1.0,
+      "energy_savings_pct": 90.9284332688588,
+      "green_usage": 90.32882011605416,
+      "medium_usage": 5.415860735009671,
+      "heavy_usage": 4.25531914893617
+    },
+    {
+      "green_threshold": 0.9500000000000004,
+      "medium_threshold": 0.8000000000000003,
+      "accuracy": 1.0,
+      "energy_savings_pct": 90.79948420373952,
+      "green_usage": 90.32882011605416,
+      "medium_usage": 5.222437137330754,
+      "heavy_usage": 4.448742746615087
+    },
+    {
+      "green_threshold": 0.9500000000000004,
+      "medium_threshold": 0.8500000000000003,
+      "accuracy": 1.0,
+      "energy_savings_pct": 90.79948420373952,
+      "green_usage": 90.32882011605416,
+      "medium_usage": 5.222437137330754,
+      "heavy_usage": 4.448742746615087
+    },
+    {
+      "green_threshold": 0.9500000000000004,
+      "medium_threshold": 0.9000000000000004,
+      "accuracy": 1.0,
+      "energy_savings_pct": 90.4126370083817,
+      "green_usage": 90.32882011605416,
+      "medium_usage": 4.642166344294004,
+      "heavy_usage": 5.029013539651837
+    },
+    {
+      "green_threshold": 0.9500000000000004,
+      "medium_threshold": 0.9500000000000004,
+      "accuracy": 1.0,
+      "energy_savings_pct": 89.76789168278529,
+      "green_usage": 90.32882011605416,
+      "medium_usage": 3.67504835589942,
+      "heavy_usage": 5.996131528046422
+    }
+  ],
+  "fine_summary": [
+    {
+      "green_threshold": 0.5,
+      "medium_threshold": 0.5,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.47969052224371,
+      "green_usage": 99.80657640232108,
+      "medium_usage": 0.0,
+      "heavy_usage": 0.19342359767891684
+    },
+    {
+      "green_threshold": 0.51,
+      "medium_threshold": 0.5,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.36363636363636,
+      "green_usage": 99.41972920696325,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.19342359767891684
+    },
+    {
+      "green_threshold": 0.51,
+      "medium_threshold": 0.51,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.36363636363636,
+      "green_usage": 99.41972920696325,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.19342359767891684
+    },
+    {
+      "green_threshold": 0.52,
+      "medium_threshold": 0.5,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.36363636363636,
+      "green_usage": 99.41972920696325,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.19342359767891684
+    },
+    {
+      "green_threshold": 0.52,
+      "medium_threshold": 0.51,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.36363636363636,
+      "green_usage": 99.41972920696325,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.19342359767891684
+    },
+    {
+      "green_threshold": 0.52,
+      "medium_threshold": 0.52,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.36363636363636,
+      "green_usage": 99.41972920696325,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.19342359767891684
+    },
+    {
+      "green_threshold": 0.53,
+      "medium_threshold": 0.5,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.1766602192134,
+      "green_usage": 99.22630560928434,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.3868471953578337
+    },
+    {
+      "green_threshold": 0.53,
+      "medium_threshold": 0.51,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.1766602192134,
+      "green_usage": 99.22630560928434,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.3868471953578337
+    },
+    {
+      "green_threshold": 0.53,
+      "medium_threshold": 0.52,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.1766602192134,
+      "green_usage": 99.22630560928434,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.3868471953578337
+    },
+    {
+      "green_threshold": 0.53,
+      "medium_threshold": 0.53,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.1766602192134,
+      "green_usage": 99.22630560928434,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.3868471953578337
+    },
+    {
+      "green_threshold": 0.54,
+      "medium_threshold": 0.5,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.1766602192134,
+      "green_usage": 99.22630560928434,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.3868471953578337
+    },
+    {
+      "green_threshold": 0.54,
+      "medium_threshold": 0.51,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.1766602192134,
+      "green_usage": 99.22630560928434,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.3868471953578337
+    },
+    {
+      "green_threshold": 0.54,
+      "medium_threshold": 0.52,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.1766602192134,
+      "green_usage": 99.22630560928434,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.3868471953578337
+    },
+    {
+      "green_threshold": 0.54,
+      "medium_threshold": 0.53,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.1766602192134,
+      "green_usage": 99.22630560928434,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.3868471953578337
+    },
+    {
+      "green_threshold": 0.54,
+      "medium_threshold": 0.54,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 96.1766602192134,
+      "green_usage": 99.22630560928434,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.3868471953578337
+    },
+    {
+      "green_threshold": 0.55,
+      "medium_threshold": 0.5,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 95.98968407479046,
+      "green_usage": 99.03288201160542,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.5802707930367506
+    },
+    {
+      "green_threshold": 0.55,
+      "medium_threshold": 0.51,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 95.98968407479046,
+      "green_usage": 99.03288201160542,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.5802707930367506
+    },
+    {
+      "green_threshold": 0.55,
+      "medium_threshold": 0.52,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 95.98968407479046,
+      "green_usage": 99.03288201160542,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.5802707930367506
+    },
+    {
+      "green_threshold": 0.55,
+      "medium_threshold": 0.53,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 95.98968407479046,
+      "green_usage": 99.03288201160542,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.5802707930367506
+    },
+    {
+      "green_threshold": 0.55,
+      "medium_threshold": 0.54,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 95.98968407479046,
+      "green_usage": 99.03288201160542,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.5802707930367506
+    },
+    {
+      "green_threshold": 0.55,
+      "medium_threshold": 0.55,
+      "accuracy": 0.9980657640232108,
+      "energy_savings_pct": 95.98968407479046,
+      "green_usage": 99.03288201160542,
+      "medium_usage": 0.3868471953578337,
+      "heavy_usage": 0.5802707930367506
+    }
+  ],
+  "best": {
     "green_threshold": 0.5,
     "medium_threshold": 0.5,
     "accuracy": 0.9980657640232108,
     "energy_savings_pct": 96.47969052224371
   },
-  "Max Accuracy": {
-    "green_threshold": 0.6000000000000001,
-    "medium_threshold": 0.5,
-    "accuracy": 1.0,
-    "energy_savings_pct": 95.68665377176015
-  },
-  "Max Energy": {
-    "green_threshold": 0.5,
-    "medium_threshold": 0.5,
-    "accuracy": 0.9980657640232108,
-    "energy_savings_pct": 96.47969052224371
-  }
+  "timestamp": "2025-12-01 21:33:58.892523"
 }

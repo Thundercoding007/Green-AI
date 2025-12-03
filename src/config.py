@@ -39,7 +39,7 @@ class Config:
     # ------------------------------
     # Model Configuration
     # ------------------------------
-    CLASSES = ["work", "spam", "support"]
+    CLASSES = ["spam", "support", "work"]
     NUM_CLASSES = len(CLASSES)
 
     TEST_SIZE = 0.15
