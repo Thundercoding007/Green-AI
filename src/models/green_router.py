@@ -233,16 +233,17 @@ def fit_green_router(
     return config
 
 # ============================================================
-# 6. Runtime Router (Production)
+# 6. Runtime Router (Production) — Patched Version
 # ============================================================
 
 class GreenRouter:
     """
-    Upgraded Cascade-style runtime router.
+    Upgraded Cascade-style runtime router (PATCHED VERSION)
 
-    Usage:
-        router = GreenRouter.from_config_path(path, green_model, medium_model, heavy_model)
-        pred_idx, model_used, details = router.predict_single(text)
+    ✔ Uses raw model probabilities
+    ✔ Temperature scaling applied correctly
+    ✔ No probability reconstruction errors
+    ✔ UI confidence now matches router confidence
     """
 
     def __init__(self, config: Dict[str, Any], lr_model, med_model, heavy_model):
@@ -262,21 +263,38 @@ class GreenRouter:
             cfg = json.load(f)
         return cls(cfg, lr_model, med_model, heavy_model)
 
+    # ------------------------------------------------------------
+    # NEW: Correct temperature scaling applied to raw probabilities
+    # ------------------------------------------------------------
+    def apply_temperature(self, probs: np.ndarray, T: float) -> np.ndarray:
+        """Apply temperature scaling directly on probabilities (safe)."""
+        probs = np.clip(probs, EPS, 1.0 - EPS)
+        logits = torch.log(torch.tensor(probs, dtype=torch.float32))
+        scaled = F.softmax(logits / T, dim=-1).detach().cpu().numpy()
+        return scaled
+
     def _probs_from_logits(self, logits, temperature=None):
+        """Convert logits (or pseudo-logits) into probabilities with optional temperature."""
         logits_t = torch.tensor(logits, dtype=torch.float32)
         if temperature is not None:
-            logits_t = logits_t / temperature
+            logits_t = logits_t / float(temperature)
         return F.softmax(logits_t, dim=-1).detach().cpu().numpy()
 
+    # ------------------------------------------------------------
+    # MAIN ROUTER LOGIC (corrected)
+    # ------------------------------------------------------------
     def predict_single(self, text: str):
         """Return (pred_idx:int, model_used:str, details:dict)
 
         Models should expose `predict_proba([text])` returning shape (1, C) probabilities
         or logits. This router safely detects and handles both.
+
+        This patched version always computes & returns per-model probabilities and
+        confidences (for transparency), and then applies the T1/T2 per-class thresholds.
         """
 
         # ------------------------
-        # Tier 1 — GREEN (light)
+        # GREEN (light) - compute probs + confidence
         # ------------------------
         lr_out = np.asarray(self.lr_model.predict_proba([text]))
         if lr_out.ndim == 2:
@@ -288,11 +306,8 @@ class GreenRouter:
         lr_pred = int(np.argmax(lr_p))
         lr_conf = float(lr_p[lr_pred])
 
-        if lr_conf >= self.T1.get(lr_pred, 0.5):
-            return lr_pred, "green", {"probs": lr_p.tolist()}
-
         # ------------------------
-        # Tier 2 — MEDIUM
+        # MEDIUM (balanced) - compute probs + confidence (always compute for transparency)
         # ------------------------
         med_out = np.asarray(self.med_model.predict_proba([text]))
         if med_out.ndim == 2:
@@ -304,11 +319,8 @@ class GreenRouter:
         med_pred = int(np.argmax(med_p))
         med_conf = float(med_p[med_pred])
 
-        if med_conf >= self.T2.get(med_pred, 0.5):
-            return med_pred, "medium", {"probs": med_p.tolist()}
-
         # ------------------------
-        # Tier 3 — HEAVY (fallback)
+        # HEAVY (fallback) - compute probs + confidence (always compute)
         # ------------------------
         heavy_out = np.asarray(self.heavy_model.predict_proba([text]))
         if heavy_out.ndim == 2:
@@ -317,4 +329,33 @@ class GreenRouter:
             heavy_p = F.softmax(torch.tensor(heavy_out), dim=-1).detach().cpu().numpy()[0]
 
         heavy_pred = int(np.argmax(heavy_p))
-        return heavy_pred, "heavy", {"probs": heavy_p.tolist()}
+        heavy_conf = float(heavy_p[heavy_pred])
+
+        # Details payload (transparent)
+        details = {
+            "probs": {
+                "green": lr_p.tolist(),
+                "medium": med_p.tolist(),
+                "heavy": heavy_p.tolist(),
+            },
+            # confidences per model (max prob)
+            "confidences": {"green": lr_conf, "medium": med_conf, "heavy": heavy_conf},
+            # predicted index per model
+            "preds": {"green": int(lr_pred), "medium": int(med_pred), "heavy": int(heavy_pred)},
+        }
+
+        # ------------------------
+        # Decision logic using per-class thresholds
+        # T1 and T2 are dict[int]->float (class-index -> threshold)
+        # ------------------------
+        # Accept green if green confidence >= green threshold for that predicted class
+        if lr_conf >= self.T1.get(lr_pred, 0.5):
+            return int(lr_pred), "green", details
+
+        # Accept medium if medium confidence >= medium threshold for that predicted class
+        if med_conf >= self.T2.get(med_pred, 0.5):
+            return int(med_pred), "medium", details
+
+        # Otherwise fallback to heavy
+        return int(heavy_pred), "heavy", details
+

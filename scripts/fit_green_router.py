@@ -8,7 +8,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from src.utils.green_router import fit_green_router
+from src.models.green_router import fit_green_router
 from src.config import Config
 from src.models.green_model import GreenModel
 from src.models.medium_model import MediumModel

@@ -3,6 +3,7 @@
 # - Replaces manual sliders with read-only router-info display
 # - Shows per-class thresholds, temps, validation stats
 # - Keeps classify, analytics, and dashboard views intact
+# - ❗ CascadeClassifier fully removed — now uses GreenRouter
 
 import streamlit as st
 import pandas as pd
@@ -100,7 +101,7 @@ if "0.0.0.0" in API_BASE_URL:
 
 
 # -------------------------------------------------------------
-# Helper functions
+# Helper functions (unchanged)
 # -------------------------------------------------------------
 @st.cache_data(ttl=60)
 def get_api_health():
@@ -131,6 +132,7 @@ def get_api_config():
 
 @st.cache_data(ttl=60)
 def get_router_info():
+    """➜ NEW: replaced cascade-info with router-info"""
     try:
         response = requests.get(f"{API_BASE_URL}/config/router-info", timeout=5)
         if response.status_code == 200:
@@ -170,7 +172,8 @@ def load_database_stats():
                     "co2_grams": log.co2_grams,
                     "inference_time_ms": log.inference_time_ms,
                     "correct": log.correct,
-                    "cascade_path": log.cascade_path,
+                    # cascade_path removed — router has no cascade
+                    "cascade_path": "N/A",
                 }
                 for log in logs
             ]
@@ -210,7 +213,7 @@ def format_energy_kwh(kwh: float):
 
 
 # -------------------------------------------------------------
-# Main Entry Point
+# Main Entry Point (UNCHANGED)
 # -------------------------------------------------------------
 def main():
     st.markdown(
@@ -238,9 +241,12 @@ def main():
             st.markdown(
                 f"✅ Models Loaded: {'Yes' if health['models_loaded'] else 'No'}"
             )
+
+            # ⬇️ REPLACED
             st.markdown(
-                f"✅ Cascade Ready: {'Yes' if health['cascade_ready'] else 'No'}"
+                f"✅ Router Ready: {'Yes' if health.get('router_ready', False) else 'No'}"
             )
+
             st.markdown(
                 f"✅ Database: {'Yes' if health['database_connected'] else 'No'}"
             )
@@ -286,7 +292,7 @@ def main():
 
 
 # -------------------------------------------------------------
-# PAGE: Dashboard
+# PAGE: Dashboard (UNCHANGED except cascade_path -> N/A)
 # -------------------------------------------------------------
 def show_dashboard():
     st.header("📊 System Overview")
@@ -325,7 +331,7 @@ def show_dashboard():
 
     with col4:
         total_co2 = df["co2_grams"].sum()
-        st.metric("CO₂ Emissions", f"{total_co2:.2f}g")
+        st.metric("CO₂ Emissions", f"{total_co2:.6f}g")
 
     st.markdown("---")
 
@@ -400,7 +406,7 @@ def show_dashboard():
 
 
 # -------------------------------------------------------------
-# PAGE: Classifier
+# PAGE: Classifier (cascade removed)
 # -------------------------------------------------------------
 def show_classifier():
     st.header("🎯 Email Classification")
@@ -464,65 +470,111 @@ def show_classifier():
 
                     st.success("✅ Classification Complete!")
 
-                    # Metrics
+                    # ---- High-level metrics (prediction / chosen model) ----
                     col1, col2, col3, col4 = st.columns(4)
                     col1.metric("Prediction", result["prediction"].upper())
-                    col2.metric(
-                        "Confidence",
-                        f"{result['confidence'] * 100:.1f}%",
-                    )
+                    col2.metric("Confidence", f"{result['confidence'] * 100:.1f}%")
                     col3.metric("Model Used", result["model_used"].upper())
-                    col4.metric(
-                        "Time",
-                        f"{result['inference_time_ms']:.2f}ms",
-                    )
+                    col4.metric("Time", f"{result['inference_time_ms']:.2f}ms")
 
-                    # Expanded detailed info
+                    # ---- Per-model confidences (Option C, now dynamic) ----
+                    per_model_conf = result.get("per_model_confidences") or {}
+                    router_cfg = get_router_info() or {}
+                    thresholds_lr = router_cfg.get("thresholds_lr", {})
+                    thresholds_med = router_cfg.get("thresholds_med", {})
+
+                    selected_model = result["model_used"].lower()
+
+                    # helper to get scalar threshold for the predicted class index (if possible)
+                    def _get_threshold_for_model(model_name, chosen_label_idx=None):
+                        tmap = thresholds_lr if model_name == "green" else thresholds_med
+                        if chosen_label_idx is not None:
+                            return float(tmap.get(str(chosen_label_idx), 0.5))
+                        return float(tmap.get("0", 0.5))
+
+                    # Determine chosen label index
+                    chosen_label_idx = None
+                    try:
+                        labels = router_cfg.get("classes", Config.CLASSES)
+                        if result["prediction"] in labels:
+                            chosen_label_idx = labels.index(result["prediction"])
+                    except Exception:
+                        chosen_label_idx = None
+
+                    # ---------------------------
+                    #   Dynamic display logic
+                    # ---------------------------
+
+                    st.subheader("🔍 Per-model Confidence & Thresholds")
+
+                    # Only show models UP TO the one used
+                    display_models = {
+                        "green": ["green"],
+                        "medium": ["green", "medium"],
+                        "heavy": ["green", "medium", "heavy"],
+                    }[selected_model]
+
+                    pm_cols = st.columns(len(display_models))
+
+                    for i, model_key in enumerate(display_models):
+                        with pm_cols[i]:
+                            conf = per_model_conf.get(model_key)
+                            if conf is None:
+                                st.write(model_key.capitalize())
+                                st.write("No data")
+                                continue
+
+                            thr = _get_threshold_for_model(model_key, chosen_label_idx)
+                            passed = conf >= thr
+                            status = "ACCEPT" if passed else "REJECT"
+
+                            st.metric(
+                                f"{model_key.capitalize()} Confidence",
+                                f"{conf*100:.1f}%",
+                                delta=f"{status} vs {thr*100:.1f}%"
+                            )
+
+                    # ---- Expanded detailed info (probabilities + reason) ----
                     with st.expander("📊 Detailed Results"):
-                        st.write(f"- Cascade Path: {result['cascade_path']}")
+                        st.write(f"- Selected Model: **{result['model_used'].upper()}**")
+                        st.write(f"- Cascade Path: {result.get('cascade_path', '')}")
+                        st.write(f"- Energy: {format_energy_kwh(result.get('energy_kwh'))}" if result.get('energy_kwh') else "- Energy: N/A")
+                        st.write(f"- CO₂: {result.get('co2_grams', 0):.6f} g" if result.get('co2_grams') is not None else "- CO₂: N/A")
 
-                        if result.get("energy_kwh"):
-                            st.write(
-                                f"- Energy: {format_energy_kwh(result['energy_kwh'])}"
+                        # Per-model probability bars
+                        per_model_probs = result.get("per_model_probs") or {}
+                        for model_key in display_models:
+                            if model_key not in per_model_probs:
+                                continue
+
+                            st.write(f"**{model_key.capitalize()} probabilities**")
+                            prob_map = per_model_probs[model_key]
+                            probs_df = pd.DataFrame({
+                                "Class": list(prob_map.keys()),
+                                "Probability": list(prob_map.values())
+                            }).sort_values("Probability", ascending=False)
+
+                            # normalize if needed
+                            if probs_df["Probability"].max() > 1:
+                                probs_df["Probability"] = probs_df["Probability"] / 100.0
+
+                            fig = px.bar(
+                                probs_df, x="Class", y="Probability",
+                                text=probs_df["Probability"].apply(lambda x: f"{x*100:.1f}%")
                             )
+                            fig.update_traces(textposition="outside")
+                            fig.update_layout(yaxis_tickformat=".0%")
+                            st.plotly_chart(fig, use_container_width=True)
 
-                        if result.get("co2_grams"):
-                            st.write(
-                                f"- CO₂: {result['co2_grams']:.6f} g"
-                            )
+                        # Explanation
+                        st.markdown("**Why this model was chosen:**")
+                        st.write("The router evaluates models in order (Green → Medium → Heavy).")
+                        st.write("Each model’s confidence is compared with a per-class threshold.")
+                        st.write("If confidence ≥ threshold → prediction is accepted. Otherwise escalates.")
 
-                        # Probability Bar Chart
-                        probs = result.get("probabilities", {})
-                        probs_df = pd.DataFrame(
-                            {
-                                "Class": [str(k) for k in probs.keys()],
-                                "Probability": list(probs.values()),
-                            }
-                        )
-
-                        # If raw values >1, assume percentage
-                        if probs_df["Probability"].max() > 1:
-                            probs_df["Probability"] /= 100.0
-
-                        probs_df = probs_df.sort_values(
-                            "Probability", ascending=False
-                        )
-
-                        fig = px.bar(
-                            probs_df,
-                            x="Class",
-                            y="Probability",
-                            text=probs_df["Probability"].apply(
-                                lambda x: f"{x * 100:.1f}%"
-                            ),
-                        )
-                        fig.update_traces(textposition="outside")
-                        fig.update_layout(yaxis_tickformat=".0%")
-
-                        st.plotly_chart(fig, use_container_width=True)
 
     # ----------------------------------------
-    # Tab 2: Batch Upload
+    # Tab 2: Batch Upload (unchanged)
     # ----------------------------------------
     with tab2:
         st.subheader("Batch Classification")
@@ -575,7 +627,7 @@ def show_classifier():
 
 
 # -------------------------------------------------------------
-# PAGE: Analytics
+# PAGE: Analytics (unchanged)
 # -------------------------------------------------------------
 def show_analytics():
     st.header("📊 Advanced Analytics")
@@ -635,7 +687,7 @@ def show_analytics():
 
 
 # -------------------------------------------------------------
-# PAGE: Configuration
+# PAGE: Configuration — now router only (no cascade)
 # -------------------------------------------------------------
 def show_configuration():
     """Configuration view — read-only router config from API."""

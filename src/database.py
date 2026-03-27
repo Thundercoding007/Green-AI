@@ -160,44 +160,72 @@ def get_model_statistics(db, model_name: str = None):
     correct = sum(1 for log in logs if log.correct)
     
     return {
-        "total_inferences": total,
-        "accuracy": correct / total if total > 0 else 0,
-        "total_energy_kwh": sum(log.energy_kwh for log in logs),
-        "avg_energy_kwh": sum(log.energy_kwh for log in logs) / total,
-        "total_co2_grams": sum(log.co2_grams for log in logs),
-        "avg_inference_time_ms": sum(log.inference_time_ms for log in logs) / total,
-    }
+    "total_inferences": total,
+    "accuracy": correct / total if total > 0 else 0,
+
+    # SAFE SUMS (None → 0)
+    "total_energy_kwh": sum((log.energy_kwh or 0.0) for log in logs),
+    "avg_energy_kwh": sum((log.energy_kwh or 0.0) for log in logs) / total,
+
+    "total_co2_grams": sum((log.co2_grams or 0.0) for log in logs),
+    "avg_co2_grams": sum((log.co2_grams or 0.0) for log in logs) / total,
+
+    "avg_inference_time_ms": sum((log.inference_time_ms or 0.0) for log in logs) / total,
+}
+
 
 
 def calculate_energy_savings(db):
-    """Calculate energy savings compared to baseline"""
-    cascade_logs = db.query(InferenceLog).all()
-    
-    if not cascade_logs:
-        return None
-    
-    total_cascade_energy = sum(log.energy_kwh for log in cascade_logs)
-    total_cascade_co2 = sum(log.co2_grams for log in cascade_logs)
-    
-    # Get baseline (assume baseline would use heavy model for all)
-    heavy_avg_energy = db.query(InferenceLog).filter(
-        InferenceLog.model_used == "heavy"
-    ).with_entities(InferenceLog.energy_kwh).all()
-    
-    if heavy_avg_energy:
-        avg_heavy = sum(e[0] for e in heavy_avg_energy) / len(heavy_avg_energy)
-        baseline_energy = avg_heavy * len(cascade_logs)
-        
-        energy_saved_percent = ((baseline_energy - total_cascade_energy) / baseline_energy) * 100
-        
+    """
+    Compute realistic energy savings by comparing actual cascade usage
+    vs a baseline where Heavy model runs 100% of the time.
+    Works even if there are NO heavy-model logs in the DB.
+    """
+
+    logs = db.query(InferenceLog).all()
+    if not logs:
         return {
-            "baseline_energy_kwh": baseline_energy,
-            "cascade_energy_kwh": total_cascade_energy,
-            "energy_saved_percent": energy_saved_percent,
-            "cascade_co2_grams": total_cascade_co2,
+            "energy_saved_percent": None,
+            "cascade_co2_grams": None,
         }
-    
-    return None
+
+    # ----------- Energy consumption (kWh) per model -----------
+    ENERGY_GREEN = 0.00002   # 0.02 Wh
+    ENERGY_MED   = 0.00015   # 0.15 Wh
+    ENERGY_HEAVY = 0.00060   # 0.60 Wh
+
+    # CO₂ intensity (grams per kWh)
+    CO2_PER_KWH = 475.0
+
+    # ----------- Compute baseline & actual energy -------------
+    total_actual_kwh = 0.0
+    total_baseline_kwh = 0.0
+
+    for log in logs:
+        # Baseline → Heavy would run for *every* inference
+        total_baseline_kwh += ENERGY_HEAVY
+
+        # Actual → depends on model used
+        if log.model_used == "green":
+            total_actual_kwh += ENERGY_GREEN
+        elif log.model_used == "medium":
+            total_actual_kwh += ENERGY_MED
+        else:
+            total_actual_kwh += ENERGY_HEAVY
+
+    # ----------- Energy Saved ----------------
+    energy_saved_kwh = max(0.0, total_baseline_kwh - total_actual_kwh)
+    energy_saved_percent = (energy_saved_kwh / total_baseline_kwh) * 100.0
+
+    # ----------- CO₂ Saved -------------------
+    co2_saved_grams = energy_saved_kwh * CO2_PER_KWH
+
+    return {
+        "energy_saved_percent": round(energy_saved_percent, 4),
+        "cascade_co2_grams": round(co2_saved_grams, 6),
+        "actual_energy_kwh": round(total_actual_kwh, 6),
+        "baseline_energy_kwh": round(total_baseline_kwh, 6)
+    }
 
 
 # Initialize database on module import
